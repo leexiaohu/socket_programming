@@ -42,11 +42,11 @@ USHORT checksum(USHORT* buffer, int size)
         size -= sizeof(USHORT);  
     }  
 	
-    // ∆Ê ˝£¨Ω´◊Ó∫Û“ª∏ˆ◊÷Ω⁄¿©’πµΩÀ´◊÷£¨ ‘Ÿ¿€º”  
+    // Â•áÊï∞ÔºåÂ∞ÜÊúÄÂêé‰∏Ä‰∏™Â≠óËäÇÊâ©Â±ïÂà∞ÂèåÂ≠óÔºå ÂÜçÁ¥ØÂä†  
     if(size)  
         cksum += *(UCHAR*)buffer;  
 	
-    //∏ﬂ16  µÕ16œ‡º”£¨»°∑¥  
+    //È´ò16  ‰Ωé16Áõ∏Âä†ÔºåÂèñÂèç  
     cksum = (cksum >> 16) + (cksum & 0xffff);  
     cksum += (cksum >> 16);  
     return (USHORT)(~cksum);  
@@ -61,11 +61,11 @@ bool Decode_Icmp_Response(char *recvBuf,int packet_size,ICMP_HDR &RecvIcmp){
 	cout << "IP Length:" << pHeader->ipLength << endl;
 	ICMP_HDR *pIcmpHeader=(ICMP_HDR *)(recvBuf+sizeof(IPHeader));
 	USHORT usID,usSquNo;
-	if(pIcmpHeader->icmp_type==0){//ªÿ…˘±®Œƒ
+	if(pIcmpHeader->icmp_type==0){//ÂõûÂ£∞Êä•Êñá
 		usID=pIcmpHeader->icmp_id;
 		usSquNo=pIcmpHeader->icmp_sequence;
-		cout << "ªÿ…˘±®Œƒ" << endl;
-	}else if(pIcmpHeader->icmp_type==11){//≥¨ ±±®Œƒ
+		cout << "ÂõûÂ£∞Êä•Êñá" << endl;
+	}else if(pIcmpHeader->icmp_type==11){//Ë∂ÖÊó∂Êä•Êñá
 		char *pInnerIPHdr=recvBuf+sizeof(IPHeader)+sizeof(ICMP_HDR);
 		ICMP_HDR *pInnerIcmpHeadr=(ICMP_HDR *)(pInnerIPHdr+sizeof(IPHeader));
 		usID=pInnerIcmpHeadr->icmp_id;
@@ -74,7 +74,7 @@ bool Decode_Icmp_Response(char *recvBuf,int packet_size,ICMP_HDR &RecvIcmp){
 		//usID=pIcmpHeader->icmp_id;
 		//usSquNo=pIcmpHeader->icmp_sequence;
 		
-		cout << "≥¨ ±±®ŒƒID:" << usID << endl;
+		cout << "Ë∂ÖÊó∂Êä•ÊñáID:" << usID << endl;
 		cout << "sdsd:" << pIcmpHeader->icmp_id <<endl;
 	}else{	
 		cout << "other type packet" << endl;
@@ -103,13 +103,13 @@ bool Decode_Icmp_Response(char *recvBuf,int packet_size,ICMP_HDR &RecvIcmp){
 
 int main(int argc,char *argv[]){
 	if(argc!=2){
-		cerr << "”√∑®£∫tracert[ip or hostname]\n";
+		cerr << "Áî®Ê≥ïÔºötracert[ip or hostname]\n";
 		return -1;
 	}
 	WSADATA wsaData;
 	int err = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (WSAStartup(MAKEWORD(2, 2), &wsaData)!=0) {
-		printf("Œª¥Úø™Ã◊Ω”◊÷\n");
+		printf("‰ΩçÊâìÂºÄÂ•óÊé•Â≠ó\n");
 		return -1;
 	}
 	u_long ulDestIp=inet_addr(argv[1]);
@@ -117,15 +117,15 @@ int main(int argc,char *argv[]){
 		HOSTENT* pHost=gethostbyname(argv[1]);
 		if(pHost){
 			ulDestIp=(*(in_addr*)pHost->h_addr).s_addr;
-			cout << "Õ®π˝◊Ó∂‡" << MaxHop << "∏ˆ‘æµ„∏˙◊ŸµΩ " << argv[1] << " µƒ¬∑”…" << endl;
+			cout << "ÈÄöËøáÊúÄÂ§ö" << MaxHop << "‰∏™Ë∑ÉÁÇπË∑üË∏™Âà∞ " << argv[1] << " ÁöÑË∑ØÁî±" << endl;
 			
 		}else{
-			cerr << "Œﬁ∑®Ω‚Œˆƒø±ÍœµÕ≥°£" << endl;
+			cerr << "Êó†Ê≥ïËß£ÊûêÁõÆÊ†áÁ≥ªÁªü„ÄÇ" << endl;
 			WSACleanup();
 			return -1;
 		}
 	}else{
-		cout << "Õ®π˝◊Ó∂‡" << MaxHop << "∏ˆ‘æµ„∏˙◊ŸµΩ " << argv[1] << " µƒ¬∑”…" << endl;
+		cout << "ÈÄöËøáÊúÄÂ§ö" << MaxHop << "‰∏™Ë∑ÉÁÇπË∑üË∏™Âà∞ " << argv[1] << " ÁöÑË∑ØÁî±" << endl;
 	}
 	sockaddr_in dst_socket_addr;
 	ZeroMemory(&dst_socket_addr,sizeof(sockaddr_in));
@@ -139,6 +139,9 @@ int main(int argc,char *argv[]){
 			 return -1;
 		}
 	}
+	int myTimeout=5;
+	//ËÆæÁΩÆË∂ÖÊó∂Êó∂Èó¥
+	setsockopt(socket_raw,SOL_SOCKET,SO_RCVTIMEO,(char *)&myTimeout,sizeof(int));
 	char buff[sizeof(ICMP_HDR) + 32];  
     ICMP_HDR *pIcmp = (ICMP_HDR*)buff;  
     pIcmp->icmp_type = 8;  
@@ -147,7 +150,7 @@ int main(int argc,char *argv[]){
     pIcmp->icmp_checksum = 0;  
     pIcmp->icmp_sequence = 0;  
     memset(&buff[sizeof(ICMP_HDR)], 'E', 32);  
-    //∑¢ÀÕ  
+    //ÂèëÈÄÅ  
     USHORT nSeq = 0;  
     char recvBuf[1024];  
     SOCKADDR_IN from;  
@@ -158,7 +161,7 @@ int main(int argc,char *argv[]){
 	cout << "Target:" << inet_ntoa(dst_socket_addr.sin_addr) << endl;
     while(!reachDstFlag&&imaxhop--)  
     {  
-		//…Ë÷√IP ˝æ›∞¸Õ∑µƒttl◊÷∂Œ
+		//ËÆæÁΩÆIPÊï∞ÊçÆÂåÖÂ§¥ÁöÑttlÂ≠óÊÆµ
 		setsockopt(socket_raw,IPPROTO_IP,IP_TTL,(CHAR *)&iTTL,sizeof(iTTL));
 		cout << "TTL:" << iTTL << endl;
         int nRet;       
@@ -177,17 +180,16 @@ int main(int argc,char *argv[]){
 			nRet = recvfrom(socket_raw, recvBuf, 1024, 0, (sockaddr*)&from, &nLen);  
 			if(nRet == SOCKET_ERROR)  
 			{  
-				cout << "error" <<endl;
 				if(::WSAGetLastError() == WSAETIMEDOUT)  
 				{  
-					cout << "time out" << endl;  
-					continue; 
+					cout << "time out" << endl;
+					break; 
 				}  
 				cout << "recvfrom failed:" << WSAGetLastError() << endl;  
 				return -1;
 					 
 			} 
-			//Ω‚Œˆ  
+			//Ëß£Êûê  
 			int nTick = GetTickCount();			
 			if(nRet < sizeof(IPHeader) + sizeof(ICMP_HDR))  
 			{  
@@ -198,18 +200,19 @@ int main(int argc,char *argv[]){
 			IPHeader *pHeader =(IPHeader *)recvBuf;
 			
 			ICMP_HDR *pRecvIcmp = (ICMP_HDR*)(recvBuf + sizeof(IPHeader)); 
-			
+
+			//cout << "time: " << nTick - pRecvIcmp->icmp_timnestamp << " ms" << endl;  
 			cout << nRet << " bytes from " << inet_ntoa(from.sin_addr)<< endl ;
 			
-			//≈–∂œ «∑Ò «Õ≥“ª±®Œƒ
+			//Âà§Êñ≠ÊòØÂê¶ÊòØÁªü‰∏ÄÊä•Êñá
 			if(pRecvIcmp->icmp_id != (USHORT)GetCurrentProcessId())  
 			{  
 				break;
 			}
 			
-			//ªÿ”¶±®Œƒ
+			//ÂõûÂ∫îÊä•Êñá
 			if(pRecvIcmp->icmp_type==0||pRecvIcmp->icmp_type==11){
-				cout << "time: " << nTick - pRecvIcmp->icmp_timnestamp << " ms" << endl;  
+				
 				if(from.sin_addr.S_un.S_addr==ulDestIp){
 					cout << nRet << " bytes from " << inet_ntoa(from.sin_addr) ;  
 					cout << " icmp_seq = " << pRecvIcmp->icmp_sequence ;  
@@ -218,17 +221,17 @@ int main(int argc,char *argv[]){
 					reachDstFlag=true;
 					break;					
 				}else if(WSAGetLastError()==WSAETIMEDOUT){
-					cout << setw(9) << '*' << '\t' << "«Î«Û≥¨ ±" <<endl;
+					cout << setw(9) << '*' << '\t' << "ËØ∑Ê±ÇË∂ÖÊó∂" <<endl;
 					break;
 				}else{
 					break;
 				}
 			}								
 		}
-		Sleep(500); 
+		Sleep(1000); 
 		iTTL++;
     }  
-	cout << "\n◊∑◊ŸÕÍ≥…°£" << endl;
+	cout << "\nËøΩË∏™ÂÆåÊàê„ÄÇ" << endl;
 	closesocket(socket_raw);
 	WSACleanup();
 	return 0;
