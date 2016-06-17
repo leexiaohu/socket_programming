@@ -1,0 +1,5 @@
+﻿  winpcap.cpp
+e:\visual studio 2015\projects\winpcap\winpcap\winpcap.cpp(93): warning C4101: “ltime”: 未引用的局部变量
+e:\visual studio 2015\projects\winpcap\winpcap\winpcap.cpp(97): warning C4101: “local_tv_sec”: 未引用的局部变量
+e:\visual studio 2015\projects\winpcap\winpcap\winpcap.cpp(94): warning C4101: “timestr”: 未引用的局部变量
+  winpcap.vcxproj -> E:\visual studio 2015\Projects\winpcap\Debug\winpcap.exe
