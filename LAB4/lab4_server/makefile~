@@ -1,0 +1,23 @@
+#complier
+CC=gcc
+#flags
+CFLAGS=-lsqlite3 -lpthread
+#objects
+OBJECTS=main.o thpool.o
+all:nap
+
+thpool.o:thpool.c
+	$(GCC) -c thpool.c
+
+main.o:main.c thpool.c
+	$(GCC) $(CFLAGS) -c main.c thpool.c
+
+nap:$(OBJECTS)
+	$(CC) main.o thpool.o -o nap
+
+
+
+
+
+clean:
+	rm -rf *o nap
